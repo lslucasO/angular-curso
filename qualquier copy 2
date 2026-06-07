@@ -1,0 +1,29 @@
+var page = $call.request.getQueryParam("page");
+var pageSize = $call.request.getQueryParam("page-size");
+var dias = $call.request.getQueryParam("dias");
+
+$console.debug("page", page);
+$console.debug("pageSize", pageSize);
+$console.debug("dias", dias);
+
+
+
+if (page == null || page === "") {
+    page = "0";
+}
+
+if (dias == null || dias === "") {
+    dias = "60";
+}
+
+if (pageSize == null || pageSize === "") {
+    pageSize = "1000";
+}
+
+$console.debug("page2", page);
+$console.debug("pageSize2", pageSize);
+$console.debug("dias2", dias);
+
+$call.request.setQueryParam("page", page);
+$call.request.setQueryParam("page-size", pageSize);
+$call.request.setQueryParam("dias", dias);

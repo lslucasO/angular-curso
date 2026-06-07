@@ -1,0 +1,34 @@
+try {
+    var error = {};
+
+    var dias = $call.request.getQueryParam("dias");
+    $console.debug("dias", dias);
+
+    if (dias == null || dias === "") {
+        dias = 60;
+    } else {
+        dias = parseInt(dias, 10);
+
+        if (isNaN(dias)) {
+            error.status = 400;
+            error.message = "Parametro 'dias' inválido";
+
+            $call.addContextVariables("error", error);
+            throw new com.sensedia.interceptor.externaljar.exception.StopFlowException();
+        }
+
+        if (dias > 180) {
+            error.status = 400;
+            error.message = "Limite de dias é 180";
+
+            $call.addContextVariables("error", error);
+            throw new com.sensedia.interceptor.externaljar.exception.StopFlowException();
+        }
+    }
+
+    $call.addContextVariables("dias", dias);
+
+} catch (e) {
+    $call.tracer.trace(e);
+    throw e;
+}

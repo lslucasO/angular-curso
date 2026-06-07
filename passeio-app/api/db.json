@@ -1,0 +1,15 @@
+{
+  "categorias": [
+    {
+      "id": "1",
+      "nome": "Parques",
+      "descricao": "Lugares ao ar livre para relaxar e se divertir"
+    },
+    {
+      "nome": "Prais",
+      "descricao": "q",
+      "id": "Bx1oSdISyUA"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

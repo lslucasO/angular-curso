@@ -1,0 +1,69 @@
+function groupByCPF(lista) {
+  if (!lista || !(lista instanceof Array)) return [];
+
+  var grupos = {};
+
+  for (var i = 0; i < lista.length; i++) {
+    var obj = lista[i];
+    if (!obj || !obj.NR_CPF) continue;
+
+    var cpf = obj.NR_CPF;
+
+    if (!grupos[cpf]) {
+      grupos[cpf] = {
+        "CPF": obj.NR_CPF || "",
+        "TIPO": obj.TP_ATENDIMENTO || "",
+        "EMAIL": obj.DS_EMAIL || "",
+        "PLANO": obj.DS_CON_PLA || "",
+        "ORIGEM": obj.DS_ORI_ATE || "",
+        "TP_SEXO": obj.TP_SEXO || "",
+        "CD_PLANO": obj.CD_CON_PLA || null,
+        "CONVENIO": obj.NM_CONVENIO || "",
+        "TELEFONE": obj.NR_CELULAR2 || "",
+        "CD_CONVENIO": obj.CD_CONVENIO || null,
+        "CD_SETOR": obj.CD_SETOR,
+        "NM_SETOR": obj.NM_SETOR,
+        "NM_PACIENTE": obj.NM_PACIENTE || "",
+        "NR_CARTEIRA": obj.NR_CARTEIRA || "",
+        "NM_PRESTADOR": obj.NM_PRESTADOR || "",
+        "DT_NASCIMENTO": obj.DT_NASCIMENTO || "",
+        "DT_SOLICITACAO": obj.DT_GRAVACAO,
+        "HR_AGENDA": obj.HR_AGENDA,
+        "DT_AGENDA_INICIO": obj.DT_HORA_INICIO,
+        "DT_AGENDA_FIM": obj.DT_HORA_FIM,
+        "ITENS_SOLICITACAO": [],
+        "CD_ITEM_AGENDAMENTO": obj.CD_ITEM_AGENDAMENTO || null
+      };
+    }
+
+    grupos[cpf].ITENS_SOLICITACAO.push({
+      "ITEM_SOLICITACAO": obj.DS_ITEM_AGENDAMENTO || "",
+      "CD_ITEM_AGENDAMENTO": obj.CD_ITEM_AGENDAMENTO || null
+    });
+  }
+
+  var resultado = [];
+  for (var cpfKey in grupos) {
+    if (grupos.hasOwnProperty(cpfKey)) {
+      resultado.push(grupos[cpfKey]);
+    }
+  }
+
+  return resultado;
+}
+
+try {
+  var oldBody = JSON.parse($response.getBody().getString("utf-8"));
+
+  if (!Array.isArray(oldBody)) {
+    throw new com.sensedia.interceptor.externaljar.exception.StopFlowException();
+  }
+
+  var resultado = groupByCPF(oldBody);
+
+  $call.response.getBody().setString(JSON.stringify(resultado), "utf-8");
+
+} catch (e) {
+  $call.tracer.trace(e);
+  throw e;
+}
